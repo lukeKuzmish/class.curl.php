@@ -126,7 +126,7 @@ class Curl {
         }
         
         curl_setopt($this->_ch, CURLOPT_POST, true);
-        curl_setopt($this->_ch, CURLOPT_POSTFIELDS, );
+        curl_setopt($this->_ch, CURLOPT_POSTFIELDS, $payload);
         curl_setopt($this->_ch, CURLOPT_POSTREDIR, 2);
         
         if ($this->debug) {
