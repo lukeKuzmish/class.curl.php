@@ -1,0 +1,25 @@
+# curl_wrapper
+A simple wrapper class for cURL.
+
+# Usage
+```
+require_once("class.curl.php");
+$c = new Curl();
+$ip = $c->getRequest('http://ifconfig.me/ip');
+echo "my ip is: " . trim($ip);
+```
+
+Post requests (XHR or otherwise) require a payload
+```
+$toPost = array('submit' => 'Submit', 'zip' => 90210);
+$result = $c->postXHR($toPost, 'http://example.com/ajax/some/endpoint/');
+```
+
+The payload can be either a string or an array (which will be converted
+to x-www-form-urlencoded
+```
+$jsonToPost = array('somestuff' => 'something_else',
+                    'more_cool_stuff' => 'here it is');
+$jsonString = json_encode($jsonToPost);
+$result = $c->postXHR($jsonString, 'www.party.com/all/the-time');
+````

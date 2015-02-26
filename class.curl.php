@@ -3,9 +3,9 @@
 class Curl {
 
     // private properties
-    private $_ch                =   null;   // the meat 'n' potatoes
-    private $debug              =   false;  // sets curl to verbose
-    private $retries            =   3;      // number of attempts to retry a URL
+    private $_ch            =   null;   // the meat 'n' potatoes
+    private $debug          =   false;  // sets curl to verbose
+    private $retries        =   3;      // number of attempts to retry a URL
     
 
     // public properties
@@ -35,6 +35,7 @@ class Curl {
             curl_setopt($this->_ch, CURLOPT_COOKIEJAR, $this->cookiesFile);
             curl_setopt($this->_ch, CURLOPT_COOKIEFILE, $this->cookiesFile);
         }
+
     } // __construct
 
 
@@ -47,6 +48,7 @@ class Curl {
         else {
             curl_setopt($this->_ch, CURLOPT_VERBOSE, false);
         }
+
     } // setDebug
 
     
@@ -67,10 +69,6 @@ class Curl {
     // XmlHttpRequest methods
     public function getXHR($url = null) {
     
-        /*
-        curl_setopt($this->_ch, CURLOPT_HTTPGET, true);
-        curl_setopt($this->_ch, CURLOPT_HTTPHEADER, array("X-Requested-With: XMLHttpRequest"));
-        */
         $this->setXHR();
         return $this->getRequest($url);
 
@@ -79,25 +77,15 @@ class Curl {
     
     public function postXHR($payload, $url = null) {
     
-        /*
-        curl_setopt($this->_ch, CURLOPT_HTTPHEADER, array("X-Requested-With: XMLHttpRequest"));
-        curl_setopt($this->_ch, CURLOPT_POST, true);
-        curl_setopt($this->_ch, CURLOPT_POSTFIELDS, $payload);
-        curl_setopt($this->_ch, CURLOPT_POSTREDIR, 2);
-        if ($this->debug) {
-            echo "http query: " . http_build_query($payload, '', '&') . "\n";
-        }
-        */
         $this->setXHR();
         return $this->postRequest($payload, $url);
         
-    } // getRequest
+    } // postXHR
     
     
     public function getRequest($url = null) {
     
         curl_setopt($this->_ch, CURLOPT_HTTPGET, true);
-        
         return $this->exec($url);
 
     } // getRequest
@@ -139,7 +127,6 @@ class Curl {
     
     
     // private methods
-    
     private function setXHR() {
       
         curl_setopt($this->_ch, CURLOPT_HTTPHEADER, array("X-Requested-With: XMLHttpRequest"));
@@ -162,6 +149,7 @@ class Curl {
         curl_setopt($this->_ch, CURLOPT_USERAGENT, $this->userAgent);
         curl_setopt($this->_ch, CURLOPT_URL, $this->url);
         
+        // retry until HTTP status is 200 or we've met $Curl->retries
         $attempts = 1;
         do {
             $result = curl_exec($this->_ch);
@@ -174,6 +162,7 @@ class Curl {
         
         
         return $result;
+
     }
     
 
