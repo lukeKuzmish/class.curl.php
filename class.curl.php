@@ -59,6 +59,12 @@ class Curl {
     } // setUserAgent
     
     
+    public function setHeaders($headers) {
+
+        curl_setopt($this->_ch, CURLOPT_HTTPHEADER, $headers);
+
+    }
+
     public function getCH() {
       
         return $this->_ch;
