@@ -99,7 +99,7 @@ class Curl {
         
     } // getDOMDocument
 
-    public postDOMDocument($payload, $url = null) {
+    public function postDOMDocument($payload, $url = null) {
       // this doesn't POST a domdocument, but rather sends a post payload
       // and returns  a DOMDocument for the result
       $html = $this->postRequest($payload, $url);
