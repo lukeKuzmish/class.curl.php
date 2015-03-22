@@ -93,19 +93,39 @@ class Curl {
     
     public function getDOMDocument($url = null) {
     
-      // decodes HTML as utf-8
-        $html = $this->getRequest($url);
-        if (!$html) {
-            // might have returned false
-            return false;
-        }
-        
-        $dom = new DOMDocument();
-        @$dom->loadHTML('<?xml encoding="UTF-8">' . $html);
-        return $dom;
+      $html = $this->getRequest($url);
+      $dom = $this->htmlToDOMDocument($html);
+      return $dom;
         
     } // getDOMDocument
 
+    public postDOMDocument($payload, $url = null) {
+      // this doesn't POST a domdocument, but rather sends a post payload
+      // and returns  a DOMDocument for the result
+      $html = $this->postRequest($payload, $url);
+      $dom = $this->htmlToDOMDocument($html);
+      return $dom;
+    } // postDOMDocument
+    
+    
+    public function getXPath($url = null) {
+      
+      $dom = $this->getDOMDocument($url);
+      $xpath = new DOMXPath($dom);
+      return $xpath;
+      
+    } // getXPath
+    
+
+    public function postXPath($payload, $url = null) {
+      // this doesn't POST an XPath object, but rather posts the payload
+      // and converts the HTML to an XPath obj
+      $dom = $this->postDOMDocument($payload, $url);
+      $xpath = new DOMXPath($dom);
+      return $xpath;
+      
+    } // postXPath
+    
     
     public function postRequest($payload, $url = null) {
     
@@ -133,7 +153,13 @@ class Curl {
     
     }
     
-    
+    private function htmlToDOMDocument($html) {
+      
+      $dom = new DOMDocument();
+      @$dom->loadHTML('<?xml encoding="UTF-8">' . $html);
+      return $dom;
+      
+    }
     private function exec($url = null) {
     
         // if neither URL is set, return false
