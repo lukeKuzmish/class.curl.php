@@ -5,13 +5,15 @@ class Curl {
     // private properties
     private $_ch            =   null;   // the meat 'n' potatoes
     private $debug          =   false;  // sets curl to verbose
-    private $retries        =   3;      // number of attempts to retry a URL
-    
+    private $retries        =   0;      // number of attempts to retry a URL
+    // RETRIES is messing stuff up when APIs (mostly) return non-200 results to indicate success
+    // the workaround I've found is to getCH() and then check the status code
+    // TODO -- create method to get last status code 
 
     // public properties
     public $url             =   null;
     public $cookiesFile     =   null;
-    public $userAgent       =   "PHPCurlWrapper v0.3";
+    public $userAgent       =   "PHPCurlWrapper v0.4";
 
 
     // public methods
@@ -157,7 +159,31 @@ class Curl {
 
     }    
     
-    
+    public function deleteRequest($url = null) {
+                
+            curl_setopt($this->_ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+            return $this->exec($url);
+                
+        } // deleteRequest
+        
+        
+    public function putRequest($payload, $url = null) {
+                
+        if (is_array($payload)) {
+          $payload = http_build_query($payload, '', '&');
+        }
+                
+        curl_setopt($this->_ch, CURLOPT_CUSTOMREQUEST, "PUT");
+        curl_setopt($this->_ch, CURLOPT_POSTFIELDS, $payload);
+                
+        if ($this->debug) {
+            echo "http query: $payload\n";
+        }        
+                
+        return $this->exec($url);
+                
+    } // putRequest
+  
     // private methods
     private function setXHR() {
       
