@@ -73,6 +73,11 @@ class Curl {
 
     }
 
+    public function setBasicAuth($user, $pass) {
+
+        curl_setopt($this->_ch, CURLOPT_USERPWD, "{$user}:{$pass}");
+    }
+
     public function getCH() {
       
         return $this->_ch;
