@@ -53,6 +53,12 @@ class Curl {
 
     } // setDebug
 
+    public function setProxy($server, $port) {
+
+        $proxy = $server . ':' . $port;
+        curl_setopt($this->_ch, CURLOPT_PROXY, $proxy);
+
+    } // setProxy
     
     public function setUserAgent($userAgent = "") {
       
